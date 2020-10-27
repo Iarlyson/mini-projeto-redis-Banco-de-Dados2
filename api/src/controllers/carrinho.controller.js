@@ -21,6 +21,8 @@ exports.criarcarrinho = async (req, res) => {
         
     };
 
+    
+
     console.log("Teste" + JSON.stringify(produtos))
     client.get(id, function(err, reply){
     if(reply != null){
@@ -28,18 +30,22 @@ exports.criarcarrinho = async (req, res) => {
 
         console.log("Carrinho já existe");
         console.log(typeof(reply));
-        console.log(reply);
-        console.log(JSON.parse(reply).codigo = codigo);
-        console.log(JSON.parse(reply).quantidade = quantidade);
+        console.log("1" +reply);
+        console.log("3" + reply)
         var anterior = reply;
-        produtos.codigo = codigo;
-        produtos.quantidade = quantidade;
-        console.log(JSON.stringify(produtos) + anterior);
-        client.setex(id, 300, JSON.stringify(produtos+JSON.stringify(anterior)), function(err, resp){
+        var atual = {
+            codigo: codigo,
+            quantidade : quantidade
+        }
+        //anterior.codigo = codigo;
+       // anterior.quantidade = quantidade;
+          console.log("2" +JSON.stringify(anterior));
+        client.set(id, anterior + JSON.stringify(atual), function(err, resp){
             if(err) throw err;
             console.log(resp);
         }); 
     }else{
+
 
 
 
@@ -64,7 +70,7 @@ exports.listarCarrinho = async (req, res) => {
     const id = parseInt(req.params.id);
     client.get(id, function(err, reply){
     if(reply != null){
-        const teste = JSON.parse(reply.toString());
+        const teste = reply.toString();
         res.status(200).send(teste);
     }else{
         console.log("Chave Não encontrada");
