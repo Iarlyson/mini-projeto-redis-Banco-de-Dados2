@@ -32,6 +32,15 @@ exports.buscaProdutoPorId = async (req, res) => {
   console.log(response.rows[0].id)
 }
 
+exports.deletarProdutoId = async (req, res) => {
+  const produtoId = parseInt(req.params.id);
+  await db.query("DELETE FROM produto WHERE id = $1",[
+    produtoId
+  ]);
+  res.status(200).send({message: "produto deletado com sucesso ", produtoId});
+}
+
+
 
 
 
