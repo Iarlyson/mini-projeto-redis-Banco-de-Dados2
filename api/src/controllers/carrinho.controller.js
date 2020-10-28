@@ -10,21 +10,23 @@ const client = redis.createClient({
 client.on("connect", function(error){
     console.log("Base de Dados no Redis nosql conectado com sucesso!!");
 });
-
+var atual = []
 exports.criarcarrinho = async (req, res) => {
     const id = parseInt(req.params.id);
     const {codigo, quantidade} = req.body;
     const produtos = {
         
         codigo: codigo,
-        quantidade: quantidade
+        quantidade: quantidade,
         
     };
 
-    
+    atual.push(produtos)
 
     console.log("Teste" + JSON.stringify(produtos))
     client.get(id, function(err, reply){
+        
+        
     if(reply != null){
         console.log("Teste2" + JSON.stringify(produtos))
 
@@ -33,24 +35,29 @@ exports.criarcarrinho = async (req, res) => {
         console.log("1" +reply);
         console.log("3" + reply)
         var anterior = reply;
-        var atual = {
-            codigo: codigo,
-            quantidade : quantidade
-        }
+        
+        
         //anterior.codigo = codigo;
        // anterior.quantidade = quantidade;
           console.log("2" +JSON.stringify(anterior));
-        client.set(id, anterior + JSON.stringify(atual), function(err, resp){
+        client.set(id, JSON.stringify(atual), function(err, resp){
             if(err) throw err;
             console.log(resp);
-        }); 
+       });
+        res.status(201).send({
+            message: "Carrinho criado no Redis",
+            body: {
+              product: { id}
+            },
+          });
+
     }else{
 
 
 
 
 
-client.setex(id, 300, JSON.stringify(produtos), function(err, resp){
+client.setex(id, 300, JSON.stringify(atual), function(err, resp){
     if(err) throw err;
     console.log(resp);
 }); 
@@ -70,7 +77,7 @@ exports.listarCarrinho = async (req, res) => {
     const id = parseInt(req.params.id);
     client.get(id, function(err, reply){
     if(reply != null){
-        const teste = reply.toString();
+        const teste = JSON.parse(reply);
         res.status(200).send(teste);
     }else{
         console.log("Chave Não encontrada");
