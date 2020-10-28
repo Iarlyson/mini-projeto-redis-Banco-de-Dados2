@@ -35,6 +35,18 @@ exports.buscaProdutoPorId = async (req, res) => {
   console.log(response.rows[0].id)
 }
 
+//  Método responsável por atualizar o 'Produto' pelo 'Id' no banco SQL Postegres:
+
+exports.atualizarProdutoPorrId = async (req, res) => {
+  const id = parseInt(req.params.id);
+  const{descricao, preco} = req.body;
+
+  const response = await db.query(
+    "UPDATE produto SET descricao = $1, preco = $2 WHERE id = $3",
+    [descricao, preco, id]
+  );
+  res.status(200).send({message: "produto com sucesso !"});
+};
 
 //  Método responsável por excluir 'Produto' pelo 'Id' no banco SQL Postegres:
 

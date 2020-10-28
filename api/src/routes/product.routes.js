@@ -7,6 +7,8 @@ router.post('/produtos', productController.criarProduto);
 router.get('/produtos', productController.listarTodosProdutos);
 // Rota responsável por selecionar 'produto' pelo 'Id': (GET): localhost:3000/api/produtos/:id
 router.get('/produtos/:id', productController.buscaProdutoPorId);
+// Rota responsável por atualizar 'produto' pelo 'Id' : (PUT): localhost:3000/api/produtos/:id
+router.put('/produtos/:id', productController.atualizarProdutoPorrId);
 //  Rota responsável por deletar 'produto' pelo 'Id': (DELETE): localhost:3000/api/produtos/:id
 router.delete('/produtos/:id', productController.deletarProdutoId);
 
