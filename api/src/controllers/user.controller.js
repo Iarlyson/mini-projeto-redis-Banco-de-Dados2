@@ -37,8 +37,8 @@ exports.buscaUsuarioporId = async (req, res) => {
 //  Método responsável por atualizar o 'Usuário' pelo 'Id' no banco SQL Postegres:
 
 exports.atualizarUserId = async (req, res) => {
-  const usuarioId = parseInt(req.params.id);
-  const{id, nome} = req.body;
+  const id = parseInt(req.params.id);
+  const{nome} = req.body;
 
   const response = await db.query(
     "UPDATE usuario SET nome = $1 WHERE id = $2",
