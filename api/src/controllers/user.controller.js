@@ -28,7 +28,7 @@ exports.listarUser = async (req, res) =>{
 
 exports.buscaUsuarioporId = async (req, res) => {
   const id = parseInt(req.params.id);
-  const response = await db.query('SELECT id FROM usuario WHERE id = $1', [id]);
+  const response = await db.query('SELECT * FROM usuario WHERE id = $1', [id]);
   res.status(200).send(response.rows);
   console.log(response.rows[0].id)
 }
