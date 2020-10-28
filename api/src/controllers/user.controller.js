@@ -1,8 +1,6 @@
 const db = require("../config/database");
 
-// ==> Método responsável por criar um novo 'Usuario':
-
-
+//  Método responsável por criar o 'Usuário' no banco SQL Postegres:
 
 exports.createUser = async (req, res) => {
   const { nome} = req.body;
@@ -12,17 +10,31 @@ exports.createUser = async (req, res) => {
   );
 
   res.status(201).send({
-    message: "Usuári novo Cadastrado",
+    message: "Usuário novo Cadastrado",
     body: {
       user: { nome }
     },
   });
 };
 
+//  Método responsável por lista os 'Usuários' no banco SQL Postegres:
+
 exports.listarUser = async (req, res) =>{
   const response = await db.query('SELECT * FROM usuario ORDER BY id ASC');
   res.status(200).send(response.rows);
 }
+
+//  Método responsável por selecionar 'Usuario' pelo 'Id' no banco SQL Postegres:
+
+exports.buscaUsuarioporId = async (req, res) => {
+  const id = parseInt(req.params.id);
+  const response = await db.query('SELECT id FROM usuario WHERE id = $1', [id]);
+  res.status(200).send(response.rows);
+  console.log(response.rows[0].id)
+}
+
+
+//  Método responsável por atualizar o 'Usuário' pelo 'Id' no banco SQL Postegres:
 
 exports.atualizarUserId = async (req, res) => {
   const usuarioId = parseInt(req.params.id);
@@ -35,6 +47,7 @@ exports.atualizarUserId = async (req, res) => {
   res.status(200).send({message: "usuario atualizado com sucesso !"});
 };
 
+//  Método responsável por excluir o 'Usuário' pelo 'Id' no banco SQL Postegres:
 
 exports.deletarUserId = async (req, res) => {
   const usuarioId = parseInt(req.params.id);

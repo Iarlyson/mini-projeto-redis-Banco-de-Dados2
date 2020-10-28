@@ -1,6 +1,6 @@
 const db = require("../config/database");
 
-// ==> Método responsável por criar um novo 'Product':
+//  Método responsável por criar um novo 'Produto' no banco SQL Postegres:
 
 exports.criarProduto = async (req, res) => {
   const {descricao, preco} = req.body;
@@ -10,27 +10,33 @@ exports.criarProduto = async (req, res) => {
   );
 
   res.status(201).send({
-    message: "Product added successfully!",
+    message: "Produto novo cadastrado com sucesso!",
     body: {
       product: { descricao, preco }
     },
   });
 };
 
-// ==> Método responsável por listar todos os 'Products':
+
+//  Método responsável por listar todos os 'Produtos' no banco SQL Postegres:
+
 exports.listarTodosProdutos = async (req, res) => {
   const response = await db.query('SELECT * FROM produto ORDER BY id ASC');
   res.status(200).send(response.rows);
 };
 
 
-// ==> Método responsável por selecionar 'Product' pelo 'Id':
+//  Método responsável por selecionar 'Produto' pelo 'Id' no banco SQL Postegres:
+
 exports.buscaProdutoPorId = async (req, res) => {
   const id = parseInt(req.params.id);
   const response = await db.query('SELECT id FROM produto WHERE id = $1', [id]);
   res.status(200).send(response.rows);
   console.log(response.rows[0].id)
 }
+
+
+//  Método responsável por excluir 'Produto' pelo 'Id' no banco SQL Postegres:
 
 exports.deletarProdutoId = async (req, res) => {
   const produtoId = parseInt(req.params.id);

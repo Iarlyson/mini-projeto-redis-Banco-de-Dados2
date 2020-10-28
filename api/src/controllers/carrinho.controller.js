@@ -10,6 +10,9 @@ client.on("connect", function(error){
     console.log("Base de Dados no Redis nosql conectado com sucesso!!");
 });
 
+
+// Criar Carrinho no banco redis 
+
 exports.criarcarrinho = async (req, res) => {
     var atual = []
     const id = parseInt(req.params.id);
@@ -22,31 +25,30 @@ exports.criarcarrinho = async (req, res) => {
     };
 
 
-    console.log("Teste" + JSON.stringify(produtos))
     client.get(id, function(err, reply){
         
-        
+    //Atualizar Carrinho
     if(reply != null){
-        console.log("Teste2" + JSON.stringify(produtos))
         atual = JSON.parse(reply)
         console.log("Carrinho já existe");
         atual.push(produtos)      
-        client.setex(id, 300, JSON.stringify(atual), function(err, resp){
+        client.setex(id, 3600, JSON.stringify(atual), function(err, resp){
             if(err) throw err;
             console.log(resp);
        });
         res.status(201).send({
-            message: "",
+            message: "Carrinho atualizado!",
             body: {
               product: { id}
             },
           });
-
+    
+    //Criar um novo carrinho
 
     }else{
 
     atual.push(produtos)
-    client.setex(id, 300, JSON.stringify(atual), function(err, resp){
+    client.setex(id, 3600, JSON.stringify(atual), function(err, resp){
     if(err) throw err;
     console.log(resp);
     }); 
@@ -61,6 +63,7 @@ exports.criarcarrinho = async (req, res) => {
     });
 };
 
+// Lista todo carrinho do usuário
 
 exports.listarCarrinho = async (req, res) => {
     const id = parseInt(req.params.id);
@@ -73,4 +76,20 @@ exports.listarCarrinho = async (req, res) => {
     }
 });
 };
-  
+
+
+// Apagar Carrinho pelo id
+
+exports.excluirCarrinho = async (req, res) => {
+    const id = parseInt(req.params.id);
+    client.del(id, function(err, resp){
+        if(err) throw err;
+        console.log(resp)
+});
+    res.status(201).send({
+        message: "",
+        body: {
+        product: { id}
+    },
+  });
+};
