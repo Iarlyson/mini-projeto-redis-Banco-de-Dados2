@@ -87,7 +87,7 @@ exports.excluirCarrinho = async (req, res) => {
         console.log(resp)
 });
     res.status(201).send({
-        message: "",
+        message: "Carrinho Excluido",
         body: {
         product: { id}
     },
